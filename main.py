@@ -33,16 +33,15 @@ class Player():
 
     def up(self):
         if self.on_ground:
-            self.vel_y = -15 # the smaller the larger jump
+            self.vel_y = -12  # A smaller negative value for slower jump height
             self.on_ground = False
-            time.sleep(0.5)
 
     def move(self):
         self.y += self.vel_y
 
-        # Gravity
+        # Gravity (slowed down further to make the player fall slower)
         if not self.on_ground:
-            self.vel_y += 1  # Gravity pulls the player down
+            self.vel_y += 0.4  # Slower gravity pull for slower descent
 
         # Prevent falling through the floor
         if self.y >= SCREEN_HEIGHT - self.size:
