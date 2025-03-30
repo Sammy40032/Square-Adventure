@@ -13,6 +13,9 @@ blue = (0, 0, 255)
 black = (0, 0, 0)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+font = pygame.font.Font(None , 25)
+
 pygame.display.set_caption("Square Adventure")
 
 class Player():
@@ -56,19 +59,28 @@ def check_wall_collision(player):
     if player.x < 0:
         player.x = 0
     if player.x + player.size > SCREEN_WIDTH:
-        player.x = SCREEN_WIDTH - player.size
+        player.x = 0
 
 player = Player(CENTER_X, SCREEN_HEIGHT - 50 - 50, 5, red, 50) # x, y, speed, colour, size
-
+show_text = True
 clock = pygame.time.Clock()
 
 run = True
 while run:
     screen.fill(black)
 
+
+
+    if show_text:  # Only show text if True
+        tutorialtext = font.render('Use the w key to jump and the a and d keys to move left and right press space to remove me', True, red)
+        screen.blit(tutorialtext, (50, 50))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                show_text = False
 
     player.move()
     player.render()
