@@ -18,9 +18,11 @@ black = (0, 0, 0)
 
 BG = pygame.image.load("assets/Background.png")
 
+# font for main menu
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
+# the game
 def play():
     class Player():
         def __init__(self, x, y, speed, colour, size):
@@ -141,18 +143,25 @@ def play():
         clock.tick(60)
         pygame.display.update()
 
+# options menu
 def options():
      while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
         SCREEN.fill("white")
+        brightness = 0
 
         OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260)) # x, y
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-        OPTIONS_BACK = Button(image=None, pos=(640, 460),
+        OPTIONS_BACK = Button(image=None, pos=(640, 680),
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
+        BRIGHTNESS = Button(image=None, pos=(640, 600),
+                            text_input="BRIGHTNESS: {}".format(brightness), font=get_font(50), base_color="Black", hovering_color=(255, 255, 0))
+
+        BRIGHTNESS.changeColor(OPTIONS_MOUSE_POS)
+        BRIGHTNESS.update(SCREEN)
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
@@ -164,9 +173,14 @@ def options():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
                     main_menu()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if BRIGHTNESS.checkForInput(OPTIONS_MOUSE_POS):
+                    brightness = brightness + 25
+
 
         pygame.display.update()
 
+# main menu
 def main_menu():
     while True:
             SCREEN.blit(BG, (0, 0))
