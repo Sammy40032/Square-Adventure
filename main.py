@@ -61,7 +61,7 @@ def play():
         def left(self):
             self.x -= self.speed
 
-    player = Player(200, 450, 5, red, 50)
+    player = Player(200, 570, 5, red, 50)
 
     def check_wall_collision(player):
         if player.x < 0:
