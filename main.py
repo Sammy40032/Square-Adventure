@@ -1,6 +1,6 @@
 # imports
 import pygame, sys
-import respawn
+from respawn import check_respawn
 from button import Button
 
 pygame.init()
@@ -26,7 +26,6 @@ GAME_BG = pygame.image.load("assets/Game_Background.png")
 # font for main menu
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
-
 
 # the game
 def play():
@@ -76,13 +75,21 @@ def play():
         [pygame.Rect(100, SCREEN_HEIGHT - 100, 100, 20),
          pygame.Rect(300, SCREEN_HEIGHT - 200, 100, 20),
          pygame.Rect(500, SCREEN_HEIGHT - 300, 100, 20),
-         pygame.Rect(1000, SCREEN_HEIGHT - 400, 150, 20)]
+         pygame.Rect(760, SCREEN_HEIGHT - 300, 100, 20),
+         pygame.Rect(1000, SCREEN_HEIGHT - 400, 150, 20)],
+
+         [pygame.Rect(100, SCREEN_HEIGHT - 40, 70, 20),
+          pygame.Rect(300, SCREEN_HEIGHT - 40, 70, 20),
+          pygame.Rect(500, SCREEN_HEIGHT - 40, 70, 20),
+          pygame.Rect(700, SCREEN_HEIGHT - 40, 70, 20),
+          pygame.Rect(900, SCREEN_HEIGHT - 40, 70, 20),
+          pygame.Rect(1100, SCREEN_HEIGHT - 40, 70, 20)]
     ]
 
     current_level = 0
     platforms = levels[current_level]
 
-    player = Player(200, 570, 5, red, 50)
+    player = Player(200, 570, 5, black, 50)
 
     def check_wall_collision(player):
         nonlocal current_level, platforms
@@ -118,18 +125,20 @@ def play():
         SCREEN.fill(black)
         SCREEN.blit(GAME_BG, (0, 0))
 
-        respawn.check_respawn(player, GROUND_Y)
+        check_respawn(player, levels, current_level)
 
-        ytext = font.render(f"y: {player.y}", True, black)
-        SCREEN.blit(ytext, (10, 10))
-        xtext = font.render(f"x: {player.x}", True, black)
-        SCREEN.blit(xtext, (10, 40))
+        ytext = get_font(25).render(f"y: {player.y}", True, black)
+        xtext = get_font(25).render(f"x: {player.x}", True, black)
+        XTEXT_RECT = xtext.get_rect(center=(100, 35))
+        YTEXT_RECT = ytext.get_rect(center=(100, 70))  # x, y
+        SCREEN.blit(xtext, XTEXT_RECT)
+        SCREEN.blit(ytext, YTEXT_RECT)
 
         if show_text:
-            tutorialtext = font.render(
+            tutorialtext = get_font(18).render(
                 "Use WAD or Arrow Keys | Space to hide text | ESC to quit",
                 True, red)
-            SCREEN.blit(tutorialtext, (50, 50))
+            SCREEN.blit(tutorialtext, (200, 50))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -269,8 +278,6 @@ def main_menu():
         pygame.display.update()
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-font = pygame.font.Font(None, 25)
 
 pygame.display.set_caption("Square Adventure")
 
