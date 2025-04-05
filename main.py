@@ -21,6 +21,7 @@ black = (0, 0, 0)
 
 #background
 BG = pygame.image.load("assets/Background.png")
+GAME_BG = pygame.image.load("assets/Game_Background.png")
 
 # font for main menu
 def get_font(size):
@@ -36,15 +37,11 @@ def play():
             self.size = size
             self.speed = speed
             self.colour = colour
-
             self.vel_y = 0
             self.on_ground = True
-            self.last_jump_time = 0
 
         def render(self):
-            pygame.draw.rect(
-                SCREEN, self.colour, (self.x, self.y, self.size, self.size)
-            )
+            pygame.draw.rect(SCREEN, self.colour, (self.x, self.y, self.size, self.size))
 
         def up(self):
             if self.on_ground:
@@ -53,10 +50,8 @@ def play():
 
         def move(self):
             self.y += self.vel_y
-
             if not self.on_ground:
                 self.vel_y += 0.4
-
             if self.y >= SCREEN_HEIGHT - self.size:
                 self.y = SCREEN_HEIGHT - self.size
                 self.vel_y = 0
@@ -68,91 +63,98 @@ def play():
         def left(self):
             self.x -= self.speed
 
+
+    levels = [
+        [pygame.Rect(100, SCREEN_HEIGHT - 100, 250, 20),
+         pygame.Rect(400, SCREEN_HEIGHT - 150, 200, 20),
+         pygame.Rect(700, SCREEN_HEIGHT - 200, 250, 20)],
+
+        [pygame.Rect(200, SCREEN_HEIGHT - 120, 200, 20),
+         pygame.Rect(600, SCREEN_HEIGHT - 180, 150, 20),
+         pygame.Rect(1000, SCREEN_HEIGHT - 230, 150, 20)],
+
+        [pygame.Rect(100, SCREEN_HEIGHT - 100, 100, 20),
+         pygame.Rect(300, SCREEN_HEIGHT - 200, 100, 20),
+         pygame.Rect(500, SCREEN_HEIGHT - 300, 100, 20),
+         pygame.Rect(1000, SCREEN_HEIGHT - 400, 150, 20)]
+    ]
+
+    current_level = 0
+    platforms = levels[current_level]
+
     player = Player(200, 570, 5, red, 50)
 
     def check_wall_collision(player):
+        nonlocal current_level, platforms
         if player.x < 0:
             player.x = 0
-            # Change the x positions of the platforms
-            move_platforms()
 
-    if player.x + player.size > SCREEN_WIDTH:
-        player.x = 0
+        if player.x + player.size >= SCREEN_WIDTH:
+            current_level += 1
+            if current_level >= len(levels):
+                current_level = 0
+            platforms = levels[current_level]
 
-    def move_platforms():
-        # Change the x positions of the platforms
-        platforms[0].x += 100
-        platforms[1].x += 100
-        platforms[2].x += 100
+            first_platform = platforms[0]
+            player.x = first_platform.x + 10
+            player.y = first_platform.y - player.size
+            player.vel_y = 0
+
 
     def check_collisions(player, platforms):
         for platform in platforms:
-            if (
-                player.y + player.size >= platform.y
-                and player.y + player.size <= platform.y + 10
-            ):
-                if (
-                    player.x + player.size > platform.x
-                    and player.x < platform.x + platform.width
-                ):
-                    player.y = platform.y - player.size
-                    player.vel_y = 0
-                    player.on_ground = True
-
-    platforms = [
-        # starting platform
-        pygame.Rect(100, SCREEN_HEIGHT - 100, 250, 20),
-        # first jump
-        pygame.Rect(400, SCREEN_HEIGHT - 150, 200, 20),
-        pygame.Rect(600, SCREEN_HEIGHT - 200, 250, 20),
-    ]
+            if (player.y + player.size >= platform.y and
+                player.y + player.size <= platform.y + 10 and
+                player.x + player.size > platform.x and
+                player.x < platform.x + platform.width):
+                player.y = platform.y - player.size
+                player.vel_y = 0
+                player.on_ground = True
 
     clock = pygame.time.Clock()
-
     show_text = True
+
     while True:
         SCREEN.fill(black)
+        SCREEN.blit(GAME_BG, (0, 0))
 
         respawn.check_respawn(player, GROUND_Y)
 
-        ytext = font.render(f"y: {player.y}", True, white)
+        ytext = font.render(f"y: {player.y}", True, black)
         SCREEN.blit(ytext, (10, 10))
-        xtext = font.render(f"x: {player.x}", True, white)
+        xtext = font.render(f"x: {player.x}", True, black)
         SCREEN.blit(xtext, (10, 40))
 
         if show_text:
             tutorialtext = font.render(
-                "Use the w key to jump and the a and d keys to move left and right press space to remove me",
-                True,
-                red,
-            )
+                "Use WAD or Arrow Keys | Space to hide text | ESC to quit",
+                True, red)
             SCREEN.blit(tutorialtext, (50, 50))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     show_text = False
+                elif event.key == pygame.K_ESCAPE:
+                    main_menu()
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
+            player.up()
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            player.left()
+            player.on_ground = False
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+            player.right()
+            player.on_ground = False
 
         player.move()
         check_collisions(player, platforms)
-        player.render()
-
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w]:
-            player.up()
-        if keys[pygame.K_a]:
-            player.left()
-            player.on_ground = False
-        if keys[pygame.K_d]:
-            player.right()
-            player.on_ground = False
-        if keys[pygame.K_ESCAPE]:
-            main_menu()
-
         check_wall_collision(player)
+        player.render()
 
         for platform in platforms:
             pygame.draw.rect(SCREEN, green, platform)
