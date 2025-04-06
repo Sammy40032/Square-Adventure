@@ -156,16 +156,16 @@ def play():
     clock = pygame.time.Clock()
     show_text = True
 
-    deaths = 0
+    Lives = 3
 
     while True:
         SCREEN.fill(black)
         SCREEN.blit(GAME_BG, (0, 0))
 
-        if deaths == 3:
+        if Lives == 0:
             game_over()
         if player.y >= 670:
-            deaths  += 1
+            Lives  -= 1
 
         check_respawn(player, levels, current_level)
 
@@ -175,6 +175,10 @@ def play():
         YTEXT_RECT = ytext.get_rect(center=(100, 70))  # x, y
         SCREEN.blit(xtext, XTEXT_RECT)
         SCREEN.blit(ytext, YTEXT_RECT)
+        DEATHS_TEXT = get_font(25).render(f"Lives: {Lives}", True, black)
+        DEATHS_RECT = DEATHS_TEXT.get_rect(center=(100, 105))
+        SCREEN.blit(DEATHS_TEXT, DEATHS_RECT)
+
 
         if show_text:
             tutorialtext = get_font(18).render(
