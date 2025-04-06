@@ -2,6 +2,7 @@
 import pygame, sys
 from respawn import check_respawn
 from button import Button
+import respawn
 
 pygame.init()
 
@@ -23,6 +24,38 @@ black = (0, 0, 0)
 BG = pygame.image.load("assets/Background.png")
 GAMEICON = pygame.image.load("assets/icon.png")
 GAME_BG = pygame.image.load("assets/Game_Background.png")
+
+def game_over():
+    while True:
+        GAMEOVER_MOUSE_POS = pygame.mouse.get_pos()
+        SCREEN.fill(white)
+
+        GAMEOVER_TEXT = get_font(100).render(
+            "GAME OVER!", True, "Black"
+        )
+        GAMEOVER_RECT = GAMEOVER_TEXT.get_rect(center=(640, 260))  # x, y
+        SCREEN.blit(GAMEOVER_TEXT, GAMEOVER_RECT)
+
+        GAMEOVER_CONTINUE = Button(
+                image=None,
+                pos=(640, 400),
+                text_input="CONTINUE",
+                font=get_font(75),
+                base_color=red,
+                hovering_color="Orange",
+            )
+
+        GAMEOVER_CONTINUE.changeColor(GAMEOVER_MOUSE_POS)
+        GAMEOVER_CONTINUE.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if GAMEOVER_CONTINUE.checkForInput(GAMEOVER_MOUSE_POS):
+                    main_menu()
+        pygame.display.update()
+
 
 # font for main menu
 def get_font(size):
@@ -84,7 +117,9 @@ def play():
           pygame.Rect(500, SCREEN_HEIGHT - 40, 70, 20),
           pygame.Rect(700, SCREEN_HEIGHT - 40, 70, 20),
           pygame.Rect(900, SCREEN_HEIGHT - 40, 70, 20),
-          pygame.Rect(1100, SCREEN_HEIGHT - 40, 70, 20)]
+          pygame.Rect(1100, SCREEN_HEIGHT - 40, 70, 20)],
+
+         [pygame.Rect(100, SCREEN_HEIGHT - 230, 150, 200)]
     ]
 
     current_level = 0
@@ -122,9 +157,16 @@ def play():
     clock = pygame.time.Clock()
     show_text = True
 
+    deaths = 0
+
     while True:
         SCREEN.fill(black)
         SCREEN.blit(GAME_BG, (0, 0))
+
+        if deaths == 3:
+            game_over()
+        if player.y >= 670:
+            deaths  += 1
 
         check_respawn(player, levels, current_level)
 
