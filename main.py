@@ -56,7 +56,6 @@ def game_over():
                     main_menu()
         pygame.display.update()
 
-
 # font for main menu
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
