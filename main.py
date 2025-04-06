@@ -21,6 +21,7 @@ black = (0, 0, 0)
 
 #background
 BG = pygame.image.load("assets/Background.png")
+GAMEICON = pygame.image.load("assets/icon.png")
 GAME_BG = pygame.image.load("assets/Game_Background.png")
 
 # font for main menu
@@ -280,6 +281,7 @@ def main_menu():
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption("Square Adventure")
+pygame.display.set_icon(GAMEICON)
 
 main_menu()
 
