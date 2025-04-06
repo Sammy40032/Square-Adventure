@@ -201,7 +201,7 @@ def play():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     show_text = False
@@ -235,7 +235,6 @@ def options():
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
         SCREEN.fill("white")
-        brightness = 0
 
         OPTIONS_TEXT = get_font(45).render(
             "This is the OPTIONS screen.", True, "Black"
@@ -251,17 +250,19 @@ def options():
             base_color="Black",
             hovering_color="Green",
         )
-        BRIGHTNESS = Button(
+
+        OPTIONS_HOW_TO_PLAY = Button(
             image=None,
-            pos=(640, 600),
-            text_input="BRIGHTNESS: {}".format(brightness),
+            pos=(640, 520),
+            text_input="HOW TO PLAY",
             font=get_font(50),
             base_color="Black",
-            hovering_color=(255, 255, 0),
+            hovering_color=green
         )
 
-        BRIGHTNESS.changeColor(OPTIONS_MOUSE_POS)
-        BRIGHTNESS.update(SCREEN)
+        OPTIONS_HOW_TO_PLAY.changeColor(OPTIONS_MOUSE_POS)
+        OPTIONS_HOW_TO_PLAY.update(SCREEN)
+
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
@@ -273,9 +274,11 @@ def options():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
                     main_menu()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if BRIGHTNESS.checkForInput(OPTIONS_MOUSE_POS):
-                    brightness = brightness + 25
+                elif OPTIONS_HOW_TO_PLAY.checkForInput(OPTIONS_MOUSE_POS):
+                    How_To_Play()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    main_menu()
 
         pygame.display.update()
 
@@ -332,6 +335,58 @@ def main_menu():
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+def How_To_Play():
+    while True:
+        HOWTOPLAYMOUSEPOS = pygame.mouse.get_pos()
+        SCREEN.fill((255, 255, 255))
+
+        HOWTOPLAYTEXT = get_font(18).render(f"IN THE TOP RIGHT WHEN YOU PLAY THE GAME YOU WILL SEE", True, black)
+        HOWTOPLAYTEXT1 = get_font(18).render(f"THE X AND Y AND LIVES AND LEVEL INDICATORS.", True, black)
+        HOWTOPLAYTEXT2 = get_font(18).render(f"ALSO, IN THE TOP WHEN YOU PLAY YOU WILL SEE HOW TO MOVE.", True, black)
+        HOWTOPLAYTEXT3 = get_font(18).render(f"PRESS THE SPACE KEY IN THE GAME OVER SCREEN TO EXIT.", True, black)
+        HOWTOPLAYTEXT4 = get_font(18).render(f"SAME WITH EVERY OTHER MENU SCREEN EXCEPT FOR WHEN YOU PLAY", True, black)
+        HOWTOPLAYRECT = HOWTOPLAYTEXT.get_rect(center=(640, 40))
+        HOWTOPLAYRECT1 = HOWTOPLAYTEXT1.get_rect(center=(640, 80))
+        HOWTOPLAYRECT2 = HOWTOPLAYTEXT2.get_rect(center=(640, 120))
+        HOWTOPLAYRECT3 = HOWTOPLAYTEXT3.get_rect(center=(640, 160))
+        HOWTOPLAYRECT4 = HOWTOPLAYTEXT4.get_rect(center=(640, 200))
+        SCREEN.blit(HOWTOPLAYTEXT, HOWTOPLAYRECT)
+        SCREEN.blit(HOWTOPLAYTEXT1, HOWTOPLAYRECT1)
+        SCREEN.blit(HOWTOPLAYTEXT2, HOWTOPLAYRECT2)
+        SCREEN.blit(HOWTOPLAYTEXT3, HOWTOPLAYRECT3)
+        SCREEN.blit(HOWTOPLAYTEXT4, HOWTOPLAYRECT4)
+
+
+        HOWTOPLAYBACK = Button(
+            image=None,
+            pos=(640, 680),
+            text_input="BACK",
+            font=get_font(50),
+            base_color="Black",
+            hovering_color=green
+        )
+
+        HOWTOPLAYBACK.changeColor(HOWTOPLAYMOUSEPOS)
+        HOWTOPLAYBACK.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if HOWTOPLAYBACK.checkForInput(HOWTOPLAYMOUSEPOS):
+                    options()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    options()
+
 
         pygame.display.update()
 
