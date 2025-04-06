@@ -118,7 +118,10 @@ def play():
           pygame.Rect(900, SCREEN_HEIGHT - 40, 70, 20),
           pygame.Rect(1100, SCREEN_HEIGHT - 40, 70, 20)],
 
-         [pygame.Rect(100, SCREEN_HEIGHT - 230, 150, 200)]
+         [pygame.Rect(100, SCREEN_HEIGHT - 230, 150, 200),
+          pygame.Rect(300, SCREEN_HEIGHT - 70, 150, 200),
+          pygame.Rect(500, SCREEN_HEIGHT - 200, 150, 200)
+         ]
     ]
 
     current_level = 0
