@@ -54,6 +54,9 @@ def game_over():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if GAMEOVER_CONTINUE.checkForInput(GAMEOVER_MOUSE_POS):
                     main_menu()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    main_menu()
         pygame.display.update()
 
 # font for main menu
@@ -120,21 +123,23 @@ def play():
 
          [pygame.Rect(100, SCREEN_HEIGHT - 230, 150, 200),
           pygame.Rect(300, SCREEN_HEIGHT - 70, 150, 200),
-          pygame.Rect(500, SCREEN_HEIGHT - 200, 150, 200)
-         ]
+          pygame.Rect(500, SCREEN_HEIGHT - 200, 150, 200),
+          pygame.Rect(900, SCREEN_HEIGHT - 200, 150, 200)]
     ]
 
     current_level = 0
     platforms = levels[current_level]
+    lvl_counter = 1
 
     player = Player(200, 570, 5, black, 50)
 
     def check_wall_collision(player):
-        nonlocal current_level, platforms
+        nonlocal current_level, platforms, lvl_counter
         if player.x < 0:
             player.x = 0
 
         if player.x + player.size >= SCREEN_WIDTH:
+            lvl_counter +=1
             current_level += 1
             if current_level >= len(levels):
                 current_level = 0
@@ -181,6 +186,9 @@ def play():
         DEATHS_TEXT = get_font(25).render(f"Lives: {Lives}", True, black)
         DEATHS_RECT = DEATHS_TEXT.get_rect(center=(100, 105))
         SCREEN.blit(DEATHS_TEXT, DEATHS_RECT)
+        LVLTEXT = get_font(25).render(f"Level: {lvl_counter}", True, black)
+        LVLTEXT_RECT = LVLTEXT.get_rect(center=(100, 140))
+        SCREEN.blit(LVLTEXT, LVLTEXT_RECT)
 
 
 
