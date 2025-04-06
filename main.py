@@ -180,6 +180,7 @@ def play():
         SCREEN.blit(DEATHS_TEXT, DEATHS_RECT)
 
 
+
         if show_text:
             tutorialtext = get_font(18).render(
                 "Use WAD or Arrow Keys | Space to hide text | ESC to quit",
