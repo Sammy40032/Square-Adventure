@@ -29,6 +29,7 @@ GAME_BG = pygame.image.load("assets/Game_Background.png")
 JUMPSOUND = pygame.mixer.Sound("assets/jump.mp3")
 BUTTONCLICKSOUND = pygame.mixer.Sound("assets/buttonsoundmp3.mp3")
 LEVELCOMPLETE = pygame.mixer.Sound("assets/completelevel.mp3")
+DEATHSSOUND = pygame.mixer.Sound("assets/death.mp3")
 
 
 def game_over():
@@ -63,6 +64,7 @@ def game_over():
                     main_menu()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    BUTTONCLICKSOUND.play()
                     main_menu()
         pygame.display.update()
 
@@ -168,6 +170,8 @@ def play():
                 player.y = platform.y - player.size
                 player.vel_y = 0
                 player.on_ground = True
+            if player.y >= 670:
+                DEATHSSOUND.play()
 
     clock = pygame.time.Clock()
     show_text = True
@@ -289,6 +293,7 @@ def options():
                     How_To_Play()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    BUTTONCLICKSOUND.play()
                     main_menu()
 
         pygame.display.update()
@@ -351,6 +356,7 @@ def main_menu():
                     sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    BUTTONCLICKSOUND.play()
                     pygame.quit()
                     sys.exit()
 
@@ -400,6 +406,7 @@ def How_To_Play():
                     options()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    BUTTONCLICKSOUND.play()
                     options()
 
 
