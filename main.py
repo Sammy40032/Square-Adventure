@@ -2,8 +2,10 @@
 import pygame, sys
 from respawn import check_respawn
 from button import Button
-import respawn
+import time
+from pygame import mixer
 
+mixer.init()
 pygame.init()
 
 #consts
@@ -24,6 +26,10 @@ black = (0, 0, 0)
 BG = pygame.image.load("assets/Background.png")
 GAMEICON = pygame.image.load("assets/icon.png")
 GAME_BG = pygame.image.load("assets/Game_Background.png")
+JUMPSOUND = pygame.mixer.Sound("assets/jump.mp3")
+BUTTONCLICKSOUND = pygame.mixer.Sound("assets/buttonsoundmp3.mp3")
+LEVELCOMPLETE = pygame.mixer.Sound("assets/completelevel.mp3")
+
 
 def game_over():
     while True:
@@ -53,6 +59,7 @@ def game_over():
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if GAMEOVER_CONTINUE.checkForInput(GAMEOVER_MOUSE_POS):
+                    BUTTONCLICKSOUND.play()
                     main_menu()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -141,6 +148,7 @@ def play():
         if player.x + player.size >= SCREEN_WIDTH:
             lvl_counter +=1
             current_level += 1
+            LEVELCOMPLETE.play()
             if current_level >= len(levels):
                 current_level = 0
             platforms = levels[current_level]
@@ -209,7 +217,8 @@ def play():
                     main_menu()
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
+        if (keys[pygame.K_w] or keys[pygame.K_UP]) and player.on_ground:
+            JUMPSOUND.play()
             player.up()
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             player.left()
@@ -273,8 +282,10 @@ def options():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                    BUTTONCLICKSOUND.play()
                     main_menu()
                 elif OPTIONS_HOW_TO_PLAY.checkForInput(OPTIONS_MOUSE_POS):
+                    BUTTONCLICKSOUND.play()
                     How_To_Play()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -329,10 +340,13 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    BUTTONCLICKSOUND.play()
                     play()
                 if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    BUTTONCLICKSOUND.play()
                     options()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    BUTTONCLICKSOUND.play()
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.KEYDOWN:
@@ -382,6 +396,7 @@ def How_To_Play():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if HOWTOPLAYBACK.checkForInput(HOWTOPLAYMOUSEPOS):
+                    BUTTONCLICKSOUND.play()
                     options()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
