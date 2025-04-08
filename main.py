@@ -74,6 +74,8 @@ def get_font(size):
 
 # the game
 def play():
+    global player
+
     class Player:
         def __init__(self, x, y, speed, colour, size):
             self.x = x
@@ -244,6 +246,8 @@ def play():
 
 # options menu
 def options():
+    global player
+
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -276,11 +280,11 @@ def options():
         OPTIONS_HOW_TO_PLAY.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_HOW_TO_PLAY.update(SCREEN)
 
-
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
 
         for event in pygame.event.get():
+            global player
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -403,7 +407,6 @@ def How_To_Play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if HOWTOPLAYBACK.checkForInput(HOWTOPLAYMOUSEPOS):
                     BUTTONCLICKSOUND.play()
-                    options()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     BUTTONCLICKSOUND.play()
