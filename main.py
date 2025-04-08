@@ -407,6 +407,7 @@ def How_To_Play():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if HOWTOPLAYBACK.checkForInput(HOWTOPLAYMOUSEPOS):
                     BUTTONCLICKSOUND.play()
+                    options()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     BUTTONCLICKSOUND.play()
