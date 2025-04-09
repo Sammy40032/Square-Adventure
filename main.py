@@ -154,7 +154,7 @@ def play():
     platforms = levels[current_level]
     lvl_counter = 1
 
-    player = Player(200, 570, 5, black, 50)
+    player = Player(200, 570, 6, black, 50)
 
     def check_wall_collision(player):
         global lvl_counter
