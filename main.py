@@ -5,9 +5,11 @@ from button import Button
 import time
 from pygame import mixer
 
+# initilizations
 mixer.init()
 pygame.init()
 
+# variables
 lvl_counter = 1
 
 #consts
@@ -122,21 +124,26 @@ def play():
             self.x -= self.speed
 
 
+    # all levels
     levels = [
+        # lvl 1
         [pygame.Rect(100, SCREEN_HEIGHT - 100, 250, 20),
          pygame.Rect(400, SCREEN_HEIGHT - 150, 200, 20),
          pygame.Rect(700, SCREEN_HEIGHT - 200, 250, 20)],
 
+         # lvl 2
         [pygame.Rect(200, SCREEN_HEIGHT - 120, 200, 20),
          pygame.Rect(600, SCREEN_HEIGHT - 180, 150, 20),
          pygame.Rect(1000, SCREEN_HEIGHT - 230, 150, 20)],
 
+         # lvl 3
         [pygame.Rect(100, SCREEN_HEIGHT - 100, 100, 20),
          pygame.Rect(300, SCREEN_HEIGHT - 200, 100, 20),
          pygame.Rect(500, SCREEN_HEIGHT - 300, 100, 20),
          pygame.Rect(760, SCREEN_HEIGHT - 300, 100, 20),
          pygame.Rect(1000, SCREEN_HEIGHT - 400, 150, 20)],
 
+         # lvl 4
          [pygame.Rect(100, SCREEN_HEIGHT - 40, 70, 20),
           pygame.Rect(300, SCREEN_HEIGHT - 40, 70, 20),
           pygame.Rect(500, SCREEN_HEIGHT - 40, 70, 20),
@@ -144,18 +151,21 @@ def play():
           pygame.Rect(900, SCREEN_HEIGHT - 40, 70, 20),
           pygame.Rect(1100, SCREEN_HEIGHT - 40, 70, 20)],
 
+          # lvl 5
          [pygame.Rect(100, SCREEN_HEIGHT - 230, 150, 200),
           pygame.Rect(300, SCREEN_HEIGHT - 70, 150, 200),
           pygame.Rect(500, SCREEN_HEIGHT - 200, 150, 200),
           pygame.Rect(900, SCREEN_HEIGHT - 200, 150, 200)]
     ]
 
+    # check wall collision varivales
     current_level = 0
     platforms = levels[current_level]
     lvl_counter = 1
 
     player = Player(200, 570, 6, black, 50)
 
+    # collision functions
     def check_wall_collision(player):
         global lvl_counter
         nonlocal current_level, platforms
@@ -187,7 +197,7 @@ def play():
                 player.on_ground = True
             if player.y >= 670:
                 DEATHSSOUND.play()
-
+    # loop variables
     clock = pygame.time.Clock()
     show_text = True
 
@@ -235,6 +245,7 @@ def play():
                 elif event.key == pygame.K_ESCAPE:
                     main_menu()
 
+        # key inputs
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_w] or keys[pygame.K_UP]) and player.on_ground:
             JUMPSOUND.play()
@@ -429,6 +440,7 @@ def How_To_Play():
 
         pygame.display.update()
 
+#screen variable
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption("Square Adventure")
