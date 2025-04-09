@@ -8,6 +8,8 @@ from pygame import mixer
 mixer.init()
 pygame.init()
 
+lvl_counter = 1
+
 #consts
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -33,6 +35,7 @@ DEATHSSOUND = pygame.mixer.Sound("assets/death.mp3")
 
 
 def game_over():
+    global lvl_counter
     while True:
         GAMEOVER_MOUSE_POS = pygame.mouse.get_pos()
         SCREEN.fill(white)
@@ -40,12 +43,20 @@ def game_over():
         GAMEOVER_TEXT = get_font(100).render(
             "GAME OVER!", True, "Black"
         )
+
+        GAMEOVER_SCORE = get_font(50).render(
+            "SCORE: {}".format(lvl_counter), True, "Black"
+        )
+
         GAMEOVER_RECT = GAMEOVER_TEXT.get_rect(center=(640, 260))  # x, y
         SCREEN.blit(GAMEOVER_TEXT, GAMEOVER_RECT)
 
+        GAMEOVERSCORE_RECT = GAMEOVER_SCORE.get_rect(center=(640, 380))
+        SCREEN.blit(GAMEOVER_SCORE, GAMEOVERSCORE_RECT)
+
         GAMEOVER_CONTINUE = Button(
                 image=None,
-                pos=(640, 400),
+                pos=(640, 500),
                 text_input="CONTINUE",
                 font=get_font(75),
                 base_color=red,
@@ -75,6 +86,7 @@ def get_font(size):
 # the game
 def play():
     global player
+    global lvl_counter
 
     class Player:
         def __init__(self, x, y, speed, colour, size):
@@ -145,7 +157,8 @@ def play():
     player = Player(200, 570, 5, black, 50)
 
     def check_wall_collision(player):
-        nonlocal current_level, platforms, lvl_counter
+        global lvl_counter
+        nonlocal current_level, platforms
         if player.x < 0:
             player.x = 0
 
